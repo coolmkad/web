@@ -34,20 +34,20 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
          
-          runs.using: node12
+          
   deploy:
     runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
+  
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: .net-app
-
+          runs.using: node12
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
