@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
+ 
     steps:
       - uses: actions/checkout@v2
 
@@ -21,7 +21,7 @@ jobs:
         with:
           dotnet-version: '7.x'
           include-prerelease: true
-
+    
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -33,21 +33,20 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-         
-          
+ 
   deploy:
     runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-  
+   
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: .net-app
-          runs.using: node12
+          
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -56,3 +55,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E75C5CF9950E45AE84965CA4FF56A191 }}
           package: .
+runs:
+  using: 'node16'
+  main: 'main.js'
